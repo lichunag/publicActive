@@ -1042,5 +1042,193 @@ display: inline-block;
 </html>
 
 
+//鼠标滚动顶部出现header悬停
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		*{margin: 0;padding: 0;}
+		.container{width: 1000px;margin:0 auto;}
+		img{width: 100%;display: block;border:0 none;}
+		.fixed{position: fixed;top:0;left:0;}
+	</style>
+</head>
+<body>
 
-			  
+	<img src="images/box1.png" id="box1" alt="">
+	<div class="container">
+	<img src="images/box2.png" alt="">
+	 <img src="images/box3.png" alt="">
+	<img src="images/box4.png" alt="">
+	<img src="images/box5.png" alt="">
+	<img src="images/box6.png" alt="">
+	<img src="images/box7.png" alt="">
+	<img src="images/box8.png" alt="">
+	</div>
+	
+	<img src="images/box9.png" alt="">
+
+	<script type="text/javascript">
+		var box1=document.getElementById("box1");
+		window.onscroll=function(){
+			var sTop=document.body.scrollTop||document.documentElement.scrollTop;
+			var win_height=document.documentElement.clientHeight;
+			if(sTop>=win_height){
+				box1.className="fixed";
+			}else{
+				box1.className="";
+			};
+			
+		};
+	</script>
+
+</body>
+</html>
+
+// 侧边栏广告长停
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css" media="screen">
+		*{margin:0;padding:0;}
+		#myDiv{
+			width: 100px;
+			height: 100px;
+			background-color: pink;
+			position: absolute;
+		}
+		body{
+			height: 2000px;
+		}
+	</style>
+</head>
+<body>
+	<div id="myDiv"></div>
+	<script>
+	 var divEl = document.getElementById('myDiv');
+		window.onload = function(){
+			
+			var clientWidth = document.documentElement.clientWidth || document.body.clientWidth;
+			var clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+			var divWidth = divEl.offsetWidth;
+			var divHeight = divEl.offsetHeight;
+
+			var left = clientWidth - divWidth;
+			var top = clientHeight/2 - divHeight/2;
+
+			divEl.style.left = left + 'px';
+			divEl.style.top = top + 'px';
+		}
+		//noresize是整个窗体发生变化
+		//onscroll是文档内容发生滚动
+		document.onresize = document.onscroll = function(){ 
+            //1:获取滚出去的scrollTop
+            var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+
+            var clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+            var divHeight =  divEl.offsetHeight;
+
+            var tops =  scrollTop + (clientHeight - divHeight)/2;
+             //计算应该在的位置
+            // divEl.style.top = tops + 'px';
+
+            //使用动画设置他应该在的位置
+            startTop(divEl,parseInt(tops));
+
+		}
+         function startTop(obj,endTop){
+         	clearInterval(obj.timer);
+         	obj.timer = setInterval(function(){
+         		//获取他的当前位置
+         		//2:通过
+         		var current = obj.offsetTop;
+         		var speed = parseInt((endTop - current))/6;
+         		if(speed > 0){
+         			speed = Math.ceil(speed);
+         		}else{
+         			speed = Math.floor(speed);
+         		}
+         		obj.style.top = (current + speed) + 'px';
+         	    if(parseInt(obj.style.top) == parseInt(endTop)){
+         	    	clearInterval(obj.timer);
+         	    }
+         	},20);
+         }
+	</script>
+</body>
+</html>
+
+
+// 简单的美女选项卡
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<link rel="stylesheet" href="">
+	<style type="text/css" media="screen">
+		*{margin: 0;padding: 0;}
+		.clear:after{ content: "";clear: both; display: block;overflow: hidden;height: 0;}
+		.box{ width: 500px; height: 150px;border: 1px solid black;position: relative;margin: 100px auto;}
+		.title{ background-color: orange;width: 500px; }
+		.title>a{ text-decoration: none;color:black; background-color: orange;float:left;width: 50px;height: 30px;line-height: 30px;text-align: 30px;}
+		.content1,.content2,.content3{
+			position: absolute;left: 0px;top:40px;display: none;
+		}
+		.title .active{ background-color: white; }
+	</style>
+</head>
+<body>
+	<div class="box">
+		<div class="title clear">
+			<a class="active" href="">第一组</a>
+			<a href="">第二组</a>
+			<a href="">第三组</a>	
+		</div>
+
+		<div class="content1" style="display:block">
+			<img src="images/0.jpg" alt="">
+			<img src="images/2.jpg" alt="">
+			<img src="images/6.jpg" alt="">
+		</div>
+		<div class="content2">
+			<img src="images/7.jpg" alt="">
+			<img src="images/8.jpg" alt="">
+			<img src="images/11.jpg" alt="">
+		</div>
+		<div class="content3">
+			<img src="images/12.jpg" alt="">
+			<img src="images/14.jpg" alt="">
+			<img src="images/16.jpg" alt="">
+		</div>
+	</div>
+
+	<script>
+		window.onload = function(){
+			var aList = document.querySelectorAll('.title>a');
+			var contentList = document.querySelectorAll('div[class^="content"]');
+			for( var i = 0; i < aList.length;i++ ){
+				aList[i].index = i;
+				aList[i].onmouseover = function(){
+                   // var index = this.index;
+                   for( var j = 0; j < aList.length;j++ ){
+                   	  if( j == this.index ){
+                         aList[this.index].className = 'active';
+                         contentList[this.index].style.display = 'block';
+                   	  }else{
+                         aList[j].className = '';
+                         contentList[j].style.display = 'none';
+                   	  }
+                   }
+				}
+			}
+		}
+	</script>
+</body>
+</html>
+
